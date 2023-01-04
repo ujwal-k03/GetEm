@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ujwal-k03/GetEm#readme",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
   }
 }
