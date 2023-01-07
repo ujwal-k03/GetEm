@@ -1,6 +1,8 @@
 const {shouldCheck} = require('./shouldCheckMessage');
 
 async function kickMember(member, violatedRegex){
+    if(!member.kickable)
+        return;
     const reason = `Another one bites the dust, *got 'em!* (Severity Level : **${violatedRegex.severity}**)`;
     await member.kick(reason);
 }
@@ -10,10 +12,12 @@ async function warnMember(member, channel ,violatedRegex){
 }
 
 module.exports = {
-    async checkMsg(message, regexArray){
+    async checkMsg(message, guildData){
 
+        const regexArray = guildData.regexArray;
+        
         // If the message is whitelisted in any way, return
-        if(! await shouldCheck(message)){
+        if(! await shouldCheck(message, guildData)){
             return;
         }
 
@@ -37,7 +41,7 @@ module.exports = {
         if(violatedRegex){
             const guildMember = message.member;
             const channel = message.channel;
-            message.delete();
+            await message.delete();
             switch(violatedRegex.severity){
                 case 1 : break;
                 case 2 : warnMember(guildMember, channel, violatedRegex); break;

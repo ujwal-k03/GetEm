@@ -1,9 +1,8 @@
 const GuildData = require('../models/guildsData');
 
 module.exports = {
-    async shouldCheck(message){
+    async shouldCheck(message, guildData){
         const guildId = message.guildId;
-        const guildData = await GuildData.findOne({guildId});
 
         let toReturn = false;
         // If the message is created in a non-filtered channel, return false
