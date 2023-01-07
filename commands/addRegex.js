@@ -37,7 +37,7 @@ module.exports = {
         
         // Interaction response
         await interaction.reply({
-            content: `Added regex \`${regex}\` with a severity of **${severity}**`,
+            content: `✅ Added regex \`${regex}\` with a severity of **${severity}**`,
             ephemeral: true
         });
     }

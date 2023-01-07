@@ -10,13 +10,13 @@ module.exports = {
             )
 
             await interaction.reply({
-                content: 'Logging channel updated successfully!',
+                content: '✅ Logging channel updated successfully!',
                 ephemeral: true
             })
         } catch (err) {
             console.log(err);
             await interaction.reply({
-                content: 'Something went wrong while updating the logging channel',
+                content: '❌ Something went wrong while updating the logging channel',
                 ephemeral: true
             })
         }

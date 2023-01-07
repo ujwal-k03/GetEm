@@ -10,13 +10,13 @@ module.exports = {
             )
 
             await interaction.reply({
-                content: 'Active channels updated successfully!',
+                content: '✅ Active channels updated successfully!',
                 ephemeral: true
             })
         } catch (err) {
             console.log(err);
             await interaction.reply({
-                content: 'Something went wrong while updating the channels',
+                content: '❌ Something went wrong while updating the channels',
                 ephemeral: true
             })
         }

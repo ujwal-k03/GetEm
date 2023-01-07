@@ -8,15 +8,14 @@ module.exports = {
                 {guildId: interaction.guildId},
                 {modRoles: interaction.values}
             )
-
             await interaction.reply({
-                content: 'Exempted roles updated successfully!',
+                content: '✅ Exempted roles updated successfully!',
                 ephemeral: true
             })
         } catch (err) {
             console.log(err);
             await interaction.reply({
-                content: 'Something went wrong while updating the roles',
+                content: '❌ Something went wrong while updating the roles',
                 ephemeral: true
             })
         }

@@ -30,13 +30,13 @@ module.exports = {
                     { $pull: {regexArray : regexEntry}},
                 )
                 await interaction.reply({
-                    content: `\`${regexEntry.regex}\` deleted succesfully!`,
+                    content: `✅ \`${regexEntry.regex}\` deleted succesfully!`,
                     ephemeral: true
                 });
             }
             catch(e){
                 await interaction.reply({
-                    content: 'Something went wrong while deleting...',
+                    content: '❌ Something went wrong while deleting...',
                     ephemeral: true
                 });
                 console.log(e);
