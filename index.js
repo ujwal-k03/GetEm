@@ -11,7 +11,13 @@ const guild_id = process.env.GUILD_ID;
 const db_URI = process.env.DB_URI;
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds, 
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent
+	]
+})
 client.commands = new Collection();
 
 // CommandsPath

@@ -19,7 +19,6 @@ module.exports = {
         // Create the embed string to be displayed
         let valueString = "```Id\tSeverity\tRegex``````"  ;
         guildData.regexArray.forEach((obj, index)=>{
-            console.log(`${index} ${obj.severity} ${obj.regex}\n`);
             let idx = `${index}`.padEnd(6,' ');
             let sev = `${obj.severity}`.padStart(4,' ').padEnd(13,' ')
             valueString += `${idx}${sev}${obj.regex}\n`;
