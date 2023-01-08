@@ -25,9 +25,12 @@ Voila! You are done setting up the client!
 ### Strong regex implementation
 The bot uses Javascript's own regex based pattern matching to deliver blazing fast results. Never let anyone get away with anything.
 
+### Three levels of offence
+You can set three severities of spam (1-3). The outcomes for a regex violation range from a silent message delete, to a warning, to a kick. Always punish fairly.
+
 ### Multi-server deployment
 The bot is extremely scalable as it uses a Document oriented database MongoDB as a backend.
-Each servers configuration is stored in a single document using it's `guildId`. This makes database queries fast and efficient.
+Each server's configuration is stored in a single document using its `guildId`. This makes database queries fast and efficient.
 Also, the bot can be turned on and off for maintainance and will 'remember' everything.
 
 ### Filter only select channels
@@ -45,6 +48,8 @@ to cleanup escaped spam.
 ### Awesome logging system
 Every action the bot takes can be logged, unless you prefer otherwise.
 
-### Self handling channel and role deletes
+### Self handling of channel and role deletes
 Did you delete one your Active Channels or a Mod Role and forget to update the bot configuration? No worries all this is handled by the bot 
 to ensure errorless and smooth running
+
+But this is not all, more features will be added in upcoming versions to truly flesh this bot out.
