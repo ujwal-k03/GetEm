@@ -1,6 +1,7 @@
 const { Events } = require('discord.js');
 const GuildData = require('../models/guildsData');
 const { checkMsg } = require('../helper/checkMessage');
+const { hasChannelPerms } = require('../helper/channelPerms');
 
 // Load the bot's client id to exempt it from checks
 require('dotenv').config();
@@ -14,6 +15,10 @@ module.exports = {
         if(!message.inGuild() || message.author.id===BOT_ID){
             return;
         }
+
+         // If there are insufficient permissions, return
+        if(!hasChannelPerms(message.channel, message.guild.members.me))
+            return;
 
         const guildId = message.guildId;
         const guildData = await GuildData.findOne({guildId}).exec();

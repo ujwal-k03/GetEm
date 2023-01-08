@@ -1,17 +1,25 @@
 const { SlashCommandBuilder } = require('discord.js');
 const GuildData = require('../models/guildsData');
 const { checkMsg } = require('../helper/checkMessage');
+const { hasChannelPerms } = require('../helper/channelPerms');
 
-const oneHour = 60*60*1000;
+const ONEHOUR = 60*60*1000;
 
 function isWithinTimeframe(date, pastTime){
     return date.getTime() >= pastTime.getTime()
 }
 
-async function CleanseChannel(channel, guildData, hours){
-    // set the value of yesterday
+async function cleanseChannel(channel, guildData, hours, guildMember){
+
+    // If the channel doesn't have permissions, return false
+    if(!hasChannelPerms(channel,guildMember)){
+        return false;
+    }
+
+    // After this point, there are permissions and always return true
+    // Set the value of yesterday
     const pastTime = new Date();
-    pastTime.setTime(pastTime.getTime() - hours*oneHour);
+    pastTime.setTime(pastTime.getTime() - hours*ONEHOUR);
 
     let toReturn = false;
 
@@ -45,8 +53,10 @@ async function CleanseChannel(channel, guildData, hours){
                 message = 0 < messagePage.size ? messagePage.at(messagePage.size - 1) : null;
             })
         if(toReturn)
-            return;
+            return true;
     }
+
+    return true;
 }
 
 module.exports = {
@@ -63,20 +73,41 @@ module.exports = {
     async execute(interaction){
         const guildId = interaction.guildId;
         const guild = interaction.guild;
+        const guildMember = guild.members.me;
         const guildData = await GuildData.findOne({guildId}).exec();
         const hours = interaction.options.getInteger('hours');
 
         const filteredChannels = guildData.filteredChannels;
-        
-        filteredChannels.forEach(id=>{
-            CleanseChannel(guild.channels.cache.get(id), guildData, hours);
-        })
-
+        let noPermChannels = "";
         await interaction.deferReply({ephemeral: true});
-        await interaction.editReply({
-            content: '✅ ***Spam removed successfully!***',
-            ephemeral: true,
-        })
+
+        for await (const id of filteredChannels){
+            const channel = guild.channels.cache.get(id);
+            if(! await cleanseChannel(channel, guildData, hours, guildMember)){
+                noPermChannels += '\t\t';
+                noPermChannels += channel.toString();
+                noPermChannels += '\n';
+            }  
+        }
+
+        try{
+            if(noPermChannels === ""){
+                await interaction.editReply({
+                    content: '✅ **Spam removed successfully!**'
+                })
+            }
+            else {
+                await interaction.editReply({
+                    content: '⚠️ **[Warning]** Channels:\n\n' 
+                            + noPermChannels 
+                            + '\nhave insuffient permssions, they have been skipped during filtering'
+                })
+            }
+        } catch(err){
+            await interaction.editReply({
+                content: 'Something went wrong while responding, your command might have been executed'
+            })
+        }
 
     }
 }

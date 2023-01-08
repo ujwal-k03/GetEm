@@ -1,9 +1,8 @@
-const GuildData = require('../models/guildsData');
+const {hasChannelPerms} = require('./channelPerms');
 
 module.exports = {
     async shouldCheck(message, guildData){
-        const guildId = message.guildId;
-
+        
         let toReturn = false;
         // If the message is created in a non-filtered channel, return false
         if(!guildData.filteredChannels.includes(message.channelId)){

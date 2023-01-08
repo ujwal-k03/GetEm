@@ -1,4 +1,7 @@
 const { SlashCommandBuilder, ActionRowBuilder, ChannelSelectMenuBuilder, ChannelType } = require('discord.js');
+let eventEmitter = require('../eventEmitter');
+
+const CUSTOM_ID = 'channel-menu';
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,7 +11,7 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(
                 new ChannelSelectMenuBuilder()
-                    .setCustomId('channel-menu')
+                    .setCustomId(CUSTOM_ID)
                     .setPlaceholder('Selecting something')
                     .setChannelTypes([
                         ChannelType.DM,
@@ -23,6 +26,10 @@ module.exports = {
             content: 'Choose the channels to be filtered',
             components: [row],
             ephemeral: true
+        })
+
+        eventEmitter.once(CUSTOM_ID, async ()=>{
+            await interaction.deleteReply();
         })
     }
 }

@@ -13,8 +13,10 @@ module.exports = {
         .setName('list-regex')
         .setDescription('List the regex strings for the current server'),
     async execute(interaction){
-        const guildData = await GuildData.findOne({guildId : interaction.guildId});
-        let listEmbed = boilerplateEmbed;
+        const guildData = await GuildData.findOne({guildId : interaction.guildId}).exec();
+
+        // Create new object so as to avoid field repetition on multiple listRegex commands
+        let listEmbed = new EmbedBuilder(boilerplateEmbed);
 
         // Create the embed string to be displayed
         let valueString = "```Id\tSeverity\tRegex``````"  ;
@@ -29,6 +31,6 @@ module.exports = {
         listEmbed.addFields({name : 'List', value: valueString});
 
         // Send it away
-        interaction.reply({embeds : [boilerplateEmbed], ephemeral : true});
+        interaction.reply({embeds : [listEmbed], ephemeral : true});
     }
 }

@@ -1,14 +1,15 @@
 const {shouldCheck} = require('./shouldCheckMessage');
+const {hasChannelPerms} = require('./channelPerms');
 
 async function kickMember(member, violatedRegex){
     if(!member.kickable)
         return;
-    const reason = `Another one bites the dust, *got 'em!* (Severity Level : **${violatedRegex.severity}**)`;
+    const reason = `*Got 'em!* (Severity Level : **${violatedRegex.severity}**)`;
     await member.kick(reason);
 }
 
 async function warnMember(member, channel ,violatedRegex){
-    await channel.send(member.toString()+` ***[Warning]*** you have violated the spam filter!`);
+    await channel.send('⚠️ **[Warning]** ' + member.toString() + ' has violated the spam filter!');
 }
 
 module.exports = {
@@ -17,9 +18,8 @@ module.exports = {
         const regexArray = guildData.regexArray;
         
         // If the message is whitelisted in any way, return
-        if(! await shouldCheck(message, guildData)){
+        if(! await shouldCheck(message, guildData))
             return;
-        }
 
         // Define the most severe regex that is violated
         let violatedRegex = undefined;

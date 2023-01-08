@@ -1,4 +1,7 @@
 const { SlashCommandBuilder, RoleSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
+let eventEmitter = require('../eventEmitter');
+
+const CUSTOM_ID = 'role-menu';
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,7 +11,7 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(
                 new RoleSelectMenuBuilder()
-                    .setCustomId('role-menu')
+                    .setCustomId(CUSTOM_ID)
                     .setPlaceholder('Select roles')
                     .setMaxValues(25)
                     .setMinValues(0)
@@ -18,6 +21,10 @@ module.exports = {
             content: 'Choose the roles to be exempted',
             components: [row],
             ephemeral: true
+        })
+
+        eventEmitter.once(CUSTOM_ID, async ()=>{
+            await interaction.deleteReply();
         })
     }
 }
