@@ -39,6 +39,8 @@ module.exports = {
         let helpEmbed = new EmbedBuilder()
             .setColor('Red')
             .setTitle('GetEm help')
+            .setImage('https://i.imgur.com/rTsmmC9.png')
+            .setThumbnail('https://i.imgur.com/ySZMZTQ.png')
             .setDescription('Here\'s some help bucko')
             .setTimestamp()
             .setFooter({text: "Beep boop I'm a bot"})
@@ -54,7 +56,7 @@ module.exports = {
                 {name: 'set-exempt-roles', value: setExemptRolesHelp},
                 {name: 'logging-channel', value: setLoggingHelp},
                 {name: 'show-config', value: showConfigHelp},
-            )
+            );
 
         await interaction.reply({
             embeds: [helpEmbed],
