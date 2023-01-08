@@ -7,10 +7,15 @@ const boilerplateEmbed = new EmbedBuilder()
     .setFooter({text : "Beep boop I'm a bot"});
 
 function loggingEmbed(listEmbed, guildData, guild){
-    const channel = guild.channels.cache.get(guildData.loggingChannel);
+    
+    const channel = guildData.loggingEnabled ? 
+            guild.channels.cache.get(guildData.loggingChannel).toString() :
+            'Logging disabled';
+
     listEmbed
         .setTitle('Logging Channel')
-        .setDescription(channel.toString());
+        .setDescription(channel);
+        
 };
 
 function exemptRoleEmbed(listEmbed, guildData, guild){
@@ -20,6 +25,7 @@ function exemptRoleEmbed(listEmbed, guildData, guild){
         roles += '\n';
     });
     
+    if(roles === "") roles = "None";
     listEmbed
         .setTitle('Exempted Roles')
         .setDescription(roles)
@@ -32,6 +38,8 @@ function activeChannelEmbed(listEmbed, guildData, guild){
         channels += '\n';
     });
     
+    if(channels === "") channels = "None";
+
     listEmbed
         .setTitle('Active Channels')
         .setDescription(channels)

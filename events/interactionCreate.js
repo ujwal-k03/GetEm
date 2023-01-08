@@ -1,12 +1,12 @@
 const { Events, Collection } = require('discord.js');
 const path = require('node:path');
 const fs = require('node:fs');
+let emitter = require('../eventEmitter');
 
 const menuPath = path.join(__dirname,'menus');
 const menuFiles = fs.readdirSync(menuPath).filter(file => file.endsWith('.js'));
 
 let menus = new Collection();
-let emitter = require('../eventEmitter');
 
 for(const file of menuFiles){
 	const filePath = path.join(menuPath,file);

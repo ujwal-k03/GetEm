@@ -22,13 +22,6 @@ module.exports = {
         let severity = interaction.options.getInteger('severity');
         let guildId = interaction.guildId;
 
-        // Check if a document exists in the database for the current guild,
-        // Else, create one
-        if(!(await GuildData.exists({guildId : guildId}))){
-            console.log(`No document found for guild [${guildId}], creating one...`);
-            await GuildData.create({guildId : guildId});
-        }
-
         // Update the document by pushing the regex onto the array
         await GuildData.updateOne(
             { guildId : guildId },
