@@ -1,22 +1,62 @@
 const {shouldCheck} = require('./shouldCheckMessage');
-const {hasChannelPerms} = require('./channelPerms');
 
-async function kickMember(member, violatedRegex){
+async function kickMember(member, loggingEnabled, loggingChannel){
     if(!member.kickable)
         return;
-    const reason = `*Got 'em!* (Severity Level : **${violatedRegex.severity}**)`;
+    const reason = `*Got 'em!*`;
     await member.kick(reason);
+
+    if(!loggingEnabled)
+        return;
+    
+        let msgContent = `🥾 **Kicked** user ${member.toString()} for the above violation`;
+    
+        await loggingChannel.send({
+            content: msgContent
+        })
 }
 
-async function warnMember(member, channel ,violatedRegex){
+async function warnMember(member, channel, loggingEnabled, loggingChannel){
     await channel.send('⚠️ **[Warning]** ' + member.toString() + ' has violated the spam filter!');
+
+    if(!loggingEnabled)
+        return;
+    
+    let msgContent = `⚠️ **Warned** user ${member.toString()} for the above violation`;
+    
+    await loggingChannel.send({
+        content: msgContent
+    })
+}
+
+async function delMessage(member, message, loggingEnabled, loggingChannel, violatedRegex){
+    await message.delete();
+
+    if(!loggingEnabled)
+        return;
+    
+    let msgContent = "";
+    msgContent += `❌ **Deleted** message by ${member.toString()} on ${message.createdAt.toString()}\n`;
+    msgContent += `**Channel:** ${message.channel.toString()}\n`;
+    msgContent += `**Regex violated:** \`${violatedRegex.regex}\`**[${violatedRegex.severity}]**\n`
+    msgContent += '**Message Content:**\n';
+    msgContent += `>>> ${message.content}`;
+    
+    await loggingChannel.send({
+        content: msgContent
+    })
+    
 }
 
 module.exports = {
     async checkMsg(message, guildData){
 
         const regexArray = guildData.regexArray;
-        
+        const loggingEnabled = guildData.loggingEnabled;
+        const loggingChannel = loggingEnabled ? message.guild.channels.cache.get(guildData.loggingChannel) : undefined;
+
+
+
         // If the message is whitelisted in any way, return
         if(! await shouldCheck(message, guildData))
             return;
@@ -41,11 +81,11 @@ module.exports = {
         if(violatedRegex){
             const guildMember = message.member;
             const channel = message.channel;
-            await message.delete();
+            await delMessage(guildMember, message, loggingEnabled, loggingChannel, violatedRegex);
             switch(violatedRegex.severity){
                 case 1 : break;
-                case 2 : warnMember(guildMember, channel, violatedRegex); break;
-                case 3 : kickMember(guildMember, violatedRegex); break;
+                case 2 : warnMember(guildMember, channel, loggingEnabled, loggingChannel); break;
+                case 3 : kickMember(guildMember, loggingEnabled, loggingChannel); break;
             }
         }
 

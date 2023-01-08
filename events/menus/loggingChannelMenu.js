@@ -3,10 +3,11 @@ const GuildsData = require('../../models/guildsData');
 module.exports = {
     customId: 'log-channel-menu',
     async execute(interaction){
+
         try{
             await GuildsData.updateOne(
                 {guildId: interaction.guildId},
-                {loggingEnable: true, loggingChannel: interaction.values[0]}
+                {loggingEnabled: true, loggingChannel: interaction.values[0]}
             )
 
             await interaction.reply({
