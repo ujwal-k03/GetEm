@@ -17,8 +17,9 @@
    - `CLIENT_ID` : The client id of the bot.
    - `GUILD_ID` : The guildId of the guild in which you want to test the bot.
    - `DB_URI` : Your MongoDB database connection URI.
+6. Once you are done setting up the bot, deploy the commands and be SURE to use the `/help` command first to register your server in the database.
 
-Voila! You are done setting up the client!
+Voila! You are done setting up the bot!
 
 ## Features
 
