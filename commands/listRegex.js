@@ -19,7 +19,9 @@ module.exports = {
         let listEmbed = new EmbedBuilder(boilerplateEmbed);
 
         // Create the embed string to be displayed
-        let valueString = "```Id\tSeverity\tRegex``````"  ;
+        let valueString = "```Id\tSeverity\tRegex```"  ;
+
+        valueString += "```";
         guildData.regexArray.forEach((obj, index)=>{
             let idx = `${index}`.padEnd(6,' ');
             let sev = `${obj.severity}`.padStart(4,' ').padEnd(13,' ')
@@ -27,6 +29,9 @@ module.exports = {
         })
         valueString += "```";
 
+        if(valueString === "```Id\tSeverity\tRegex`````````")
+            valueString = "None";
+            
         // Add the embed field and the footer
         listEmbed.addFields({name : 'List', value: valueString});
 

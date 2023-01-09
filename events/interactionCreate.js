@@ -1,4 +1,5 @@
 const { Events, Collection } = require('discord.js');
+const GuildData = require('../models/guildsData');
 const path = require('node:path');
 const fs = require('node:fs');
 let emitter = require('../eventEmitter');
@@ -17,6 +18,14 @@ for(const file of menuFiles){
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
+
+		if(! await GuildData.exists({guildId : interaction.guildId}) && interaction.commandName !== 'help'){
+			interaction.reply({
+				content: "Guild unregistered, please use `/help` to register guild with database",
+				ephemeral: true
+			})
+			return;
+		}
 
 		if(interaction.isAnySelectMenu()){
 			await menus.get(interaction.customId).execute(interaction);
